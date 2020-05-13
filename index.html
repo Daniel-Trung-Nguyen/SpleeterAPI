@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:fb="http://ogp.me/ns/fb#">
+<head>
+    <meta charset="utf-8" />
+    <meta name="google" content="notranslate">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SEK Spleeter Online</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta property="og:image" content="https://i.imgur.com/xrF9QUG.png" />
+
+    <meta name="google-signin-client_id" content="555554163249-um7l4o2a1oou5ota9teoktnu4mrrffod.apps.googleusercontent.com">
+
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="splitter.css">
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div id="big-one" style="max-width: 640px; margin: 0 auto;">
+
+        <div class="banner-message"> 
+            
+            <div class="g-signin2" data-onsuccess="onSignIn" id="signin"></div>
+            <!-- data-theme="dark" -->
+            <div id="signout" style="display: none;">
+                <a href="#" onclick="signOut();">Sign out</a>
+            </div> 
+
+            <div class="activation-code" id="user" style="display: none;">
+                <div>
+                    <input type="text" id="active" class="code" value="" placeholder="Licensed Email Address" style="min-width: 240px; text-align: center; width:50%;" />
+                </div>           
+            </div>
+
+            <div class="app-title">
+                <span style="margin: 0 auto;">
+                    <b> SEK Spleeter</b>
+                </span>
+            </div>         
+
+
+            <div id="div-config">
+                
+                <!-- <br /> -->
+
+                <div id="presets-section">
+                    <span style="font-weight: bold;">Presets: </span>
+                    <a href="audio/karaoke" onclick="return presetClick('audio-karaoke');">Audio Karaoke</a>
+                    |
+                    <a href="video/karaoke" onclick="return presetClick('video-karaoke');">Video Karaoke</a>
+                    |
+                    <a href="audio/vocals" onclick="return presetClick('audio-vocals');">Vocals</a>
+                    |
+                    <a href="default" onclick="return presetClick('default');">Default</a>
+                </div>
+                <div>
+                    <span class="section-title">Mode</span>
+                    <select id='type' title="Type">
+                        <option value='2stems'>2 stems (Karaoke + Vocals)</option>
+                        <option value='4stems' selected>4 stems (Bass, Drums, Vocals, Other)</option>
+                        <option value='5stems'>5 stems (Piano, Bass, Drums, Vocals, Other)</option>
+                    </select>
+                </div>
+                <div id="container-stems">
+                    <br />
+                    <span class="section-title">Include stems</span>
+                    <div id="div-stems" style="display:none; background-color: #EEEEEE;">
+                        <div class="_2stems">
+                            <input id="toggle-accompaniment" value="accompaniment" type="checkbox" checked>
+                            <label for="toggle-accompaniment">Karaoke</label>
+                        </div>
+                        <div class="_4stems _5stems">
+                            <input id="toggle-bass" value="bass" type="checkbox" checked>
+                            <label for="toggle-bass">Bass</label>
+                        </div>
+                        <div class="_4stems _5stems">
+                            <input id="toggle-drums" value="drums" type="checkbox" checked>
+                            <label for="toggle-drums">Drums</label>
+                        </div>
+                        <div class="_4stems _5stems">
+                            <input id="toggle-other" value="other" type="checkbox" checked>
+                            <label for="toggle-other">Other</label>
+                        </div>
+                        <div class="_5stems">
+                            <input id="toggle-piano" value="piano" type="checkbox" checked>
+                            <label for="toggle-piano">Piano</label>
+                        </div>
+                        <div class="_2stems _4stems _5stems">
+                            <input id="toggle-vocals" value="vocals" type="checkbox" checked>
+                            <label for="toggle-vocals">Vocals</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="container-options">
+                    <br />
+                    <span class="section-title">Options</span>
+                    <div id="options">
+                        <div>
+                            <div>
+                                <input type="checkbox" id="chk-hf" value="hf" checked> <label for="chk-hf" title="Check to include an average of the high frequencies (>11khz)">Include high frequencies</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="container-output">
+                    <br />
+                    <span class="section-title">Output type</span>
+                    <div class="output-type">
+                        <div style="display: block;">
+                            <input id="rad-zip" name="output-type" type="radio" value=".zip" checked>
+                            <label for="rad-zip">Separated audio stems (.zip)</label>
+                        </div>
+                        <div style="display: block;">
+                            <input id="rad-mp3" name="output-type" value=".mp3" type="radio">
+                            <label for="rad-mp3">Single audio mix (.mp3)</label>
+                        </div>
+                        <div style="display: block;">
+                            <input id="rad-mp4" name="output-type" value=".mp4" type="radio">
+                            <label for="rad-mp4">Video + audio mix (.mp4)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tabs">
+                <ul id="tabs-nav">
+                    <li><a href="#tab1">YouTube</a></li>
+                    <li><a href="#tab2">File</a></li>
+                </ul>
+
+                <div id="tabs-content">
+                    <div id="tab1" class="tab-content">
+                        <div id="div-search" style="display:none;" class="banner-message">
+                            <div>
+                                <div style="margin-bottom: 7px;">
+                                    <input type="checkbox" id="chk-cc" value="cc"> <label style="font-size: 17px;" for="chk-cc" title="Check to only include videos with closed captions (subtitles) on the search">Only videos with subtitles</label>
+                                </div>
+                                <div id="input-search-section">
+                                    <input id="search" class="search" autocapitalize="none" autocomplete="on" name="search_query" type="text" spellcheck="false" placeholder="YouTube Search" style="outline: none; text-align: center;">
+                                    <button id="btn-search" type="submit"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                            <div id="search-section" style="display:none;">
+                                <div id="accordion">
+                                    <div id="accordion-header">Search results</div>
+                                    <div id="search-results">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div id="div-main" class="banner-message">
+                            <div>
+                                <input type="text" id="url" class="search" value="" placeholder="YouTube URL or Video ID" style="min-width: 240px; text-align: center; width:100%;" />
+                            </div>
+                            <div id="video-info">
+                                <span id="video-title"></span>
+                                <div id="duration"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab2" class="tab-content">
+                        <div class="banner-message">
+                            <div class="dropzone-container">
+                                <form id="uploader" class="dropzone-drop-area">
+                                    <input type="hidden" name="includeHf" id="file-hf" />
+                                    <input type="hidden" name="format" id="file-format" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div><button id="btn-split" class="split-button" disabled="disabled">You must sign in first!</button></div>
+                <!-- disabled="disabled" -->
+                <!-- <div id="extra-buttons" style="font-size: small; padding-top: 10px;">
+                    <a href="audio/original" onclick="return originalDownloadClick('audio');">Original audio</a>
+                    |
+                    <a href="video/original" onclick="return originalDownloadClick('video');">Original video</a>
+                </div> -->
+            </div>
+
+            <footer class="border-top footer text-muted">
+                <div class="container">
+                    <!-- <p>&copy; Skill-Express - <a id="sub" href="https://www.skill-express.com/">Click to Subscribe</a></p> -->
+                    <!-- <p>&copy; Skill-Express - <button id="sub" onclick="load_html();">Click to Subscribe</button></p> -->
+                    <p>&copy; Skill-Express - <a id="sub" href="premium.html" rel="modal:open">Click to Subscribe</a></p>
+                    <!-- <span style="margin: 0 auto; padding: 10px 0px 0px 0px; vertical-align: middle;"><a href="https://www.paypal.me/skillexpressUS"><img src="https://img.shields.io/badge/Sponsor-critical" /></a></span> -->
+                    <!-- <span>
+                        style="margin: 0 auto; padding: 10px 0px 0px 0px; vertical-align: middle;"> test 
+                    </span> -->
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <div id="wait-dialog" class="modal">
+        <div class="loader" id="spinner" style="display:none;"></div>
+        <div>
+            Processing. Please wait a few minutes...
+        </div>
+        <button id="btn-close-wait">Close</button>
+    </div>
+
+    <div id="payment-window" class="modal modal-lg" style="width:1250px;">
+        <div class="payment-popup" id="pay" style="display:none;width:1250px;"></div>
+        <div id="payment-window-body"> </div>
+        <button id="btn-close-payment">Close</button>
+    </div>
+
+    <script type="text/javascript" src="splitter.js"></script>
+
+    <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script>
+
+    <script type="text/javascript" src="ggsignin.js"></script>
+
+    <!-- <script>
+
+        // function load_html(divID,htmlPage) {
+        //     document.getElementById(divID).innerHTML='<object type="text/html" data=' + htmlPage + ' ></object>';
+        // }
+    </script> -->
+
+</body>
+</html>

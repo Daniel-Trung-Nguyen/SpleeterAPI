@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        span.info {
+            font-size: 90%
+        }
+    </style>
+    <title>Premium Plan</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+    <!-- <script src="https://www.paypalobjects.com/api/checkout.js"></script> -->
+</head>
+
+<body>
+    <br>
+    <form id="activateForm" style="width:500px;">
+        <div class="container">
+            <div class="row">
+                <!-- <div class="col l8 offset-l2 m10 offset-m1 s12"> -->
+                <div class="test">
+
+                    <div class="activated hide">
+                        <div class="row">
+                            <div class="col s12">
+                                <h5 class='center-align blue-text text-darken-2'>SUBSCRIBED!</h5>
+                                <!-- <p>Your premium license is good until <span id="expiration"></span>. </p> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-form">
+                        <div class="row">
+                            <div class="col s12">
+                                <h5 class='center-align blue-text text-darken-2'>Unlock unlimited access with one-time
+                                    payment of $8.99</h5>
+                                <ul>
+                                    <li class="center-align grey-text text-darken-3">Unlimited Credit</li>
+                                    <!-- <li class="center-align grey-text text-darken-3" >Your requests will be processed in the order they is received</li> -->
+                                    <!-- <li class="center-align grey-text text-darken-3" >Unlimited PayPal transactions</li>                                -->
+
+                                </ul>
+                                <!-- <h5 class="center-align blue-text text-darken-2">Your license is activated right after payment</h5> -->
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col s12">
+                                <div id="digitalgoods-130520063406-dio2"></div>
+                                <!-- <div class="us" id="paypal-button-container"></div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-received hide">
+
+                        <div class="row">
+                            <div class="col s12 center-align">
+                                <h5 class='center-align blue-text text-darken-2'><b>Payment received!</b></h5>
+                                <h6 class="center-align blue-text text-darken-2">Please enter your email address below:
+                                </h6>
+                            </div>
+                        </div>
+
+                        <div class="col s12">
+                            <div class="input-field">
+                                <input id="emailAddress" name="Email_Address" type="email" class="validate" required=""
+                                    aria-required="true">
+                                <label for="emailAddress" data-error="wrong format">Email Address</label>
+                                <!-- <span class="info">Enter the Google account you would like to host files.</span> -->
+                            </div>
+                        </div>
+
+                        <div class="confirm">
+                            <div class="col s12">
+                                <button id="submit" class="btn waves-effect waves-light blue btn-large" type="submit"
+                                    name="action"><b>Subscribe Now</b>
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    </form>
+    <script type="text/javascript" src="ppGS.js"></script>
+</body>
+
+</html>
