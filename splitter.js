@@ -10,7 +10,7 @@ var max_duration_mins = 30;
 // Files will be installed in to C:\tools (miniconda), C:\spleeter\ (input/output), C:\git\spleeter-api\bin\Release\netcoreapp3.0\
 // Run server using SpleeterAPI.exe
 // Replace the split_api with the local host links. Forward localhost with ngrok API
-var ngrokAPI = '6f76fd35';
+var ngrokAPI = '3af38f3dfc75';
 var split_yt_api = 'https://' + ngrokAPI + '.ngrok.io/yt';
 var split_mp3_api = 'https://' + ngrokAPI + '.ngrok.io/mp3';
 
