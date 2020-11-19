@@ -1,1 +1,625 @@
-var buttonSplit=$('#btn-split');var max_duration_mins=0x1e;var ngrokAPI='3af38f3dfc75';var split_yt_api='https://'+ngrokAPI+'.ngrok.io/yt';var split_mp3_api='https://'+ngrokAPI+'.ngrok.io/mp3';var selectedFiles=[];var dropzone;var dzError=![];window['OnLoadCallback']=()=>{let _0x144672=getCookie('spleeter_gapikey');if(_0x144672){gapi['client']['setApiKey'](_0x144672);}else{try{_0x144672=CryptoJS['AES']['decrypt']('U2FsdGVkX1/YO06ep/mFGZGtIcASWlhidpcerOBsLehPAijwiWuK4mK7AFlx/VY19QAXtEvtEusr6nNGUcJ/Fg==',('uoyk'+'cuf')['split']('')['reverse']()['join'](''))['toString'](CryptoJS['enc']['Utf8']);}finally{gapi['client']['setApiKey'](_0x144672);setCookie('spleeter_gapikey',_0x144672);}}$('#div-search')['show']();$('#extra-buttons')['show']();};$(document)['ready'](function(){makeTabs();setupDropFilesBox();$('#type')['on']('change',function(){let _0x3dc837=$(this)['val']();$('#div-stems\x20div:not(._'+_0x3dc837+')')['hide']();$('#div-stems\x20div._'+_0x3dc837)['show']();});setInputsFromCookie();$('#btn-close-wait')['on']('click',function(){stopWait();});buttonSplit['on']('click',onSplit);$('#btn-search')['on']('click',onYoutubeSearch);$(document)['on']('mouseenter','.clickable,\x20.file-clickable',function(){$(this)['css']('opacity','.5');});$(document)['on']('mouseleave','.clickable,\x20.file-clickable',function(){$(this)['css']('opacity','1');});$(document)['on']('click','.clickable',function(){let _0x5d412f=$(this)['attr']('title');if(_0x5d412f){$('#url')['val'](_0x5d412f);$('#accordion')['accordion']('option','active',![]);$('#btn-split')['focus']();getYoutubeVideoDuration(_0x5d412f,function(_0x37e03c,_0x117631){$('#duration')['text'](_0x37e03c);$('#video-title')['text'](_0x117631);$('#video-info')['show']();let _0x5ad5a1=parseInt(_0x37e03c['split'](':')[0x0])*0x3c+parseInt(_0x37e03c['split'](':')[0x1]);if(_0x5ad5a1>max_duration_mins){$('#duration')['css']('color','red');}else{$('#duration')['css']('color','black');}$('#duration')['show']();});}});$('#url')['keypress'](function(_0x3d5de){var _0x123ef4=_0x3d5de['which'];if(_0x123ef4===0xd){$('#btn-split')['click']();return![];}});$('#search')['keypress'](function(_0x475f0f){var _0x4a39c2=_0x475f0f['which'];if(_0x4a39c2===0xd){$('#btn-search')['click']();return![];}});$('#type')['change']();$('#div-stems')['show']();});function setInputsFromCookie(){let _0x20b87e=getCookie('spleeter_format');if(_0x20b87e){if(_0x20b87e['endsWith']('stems')){$('#type')['val'](_0x20b87e);}else{$('#type')['val']('4stems');}}else{$('#type')['val']('4stems');}let _0x51628e=getCookie('spleeter_hf');$('#chk-hf')['prop']('checked',_0x51628e==='true');let _0x4829a0=getCookie('spleeter_stems');if(_0x4829a0){$('#div-stems\x20input')['prop']('checked',![]);_0x4829a0['split'](',')['forEach'](_0x482f78=>$('#div-stems\x20input#toggle-'+_0x482f78)['prop']('checked',!![]));}let _0x28302e=getCookie('spleeter_output');$('input#rad-'+_0x28302e)['prop']('checked',!![]);}function setCookieFromInput(){let _0x4adc64=$('#type')['val']();setCookie('spleeter_format',_0x4adc64,0x1e);setCookie('spleeter_hf',$('#chk-hf')['is'](':checked')?'true':'false',0x1e);var _0xa86119=[];$('#div-stems\x20input')['filter'](':checked')['each'](function(){_0xa86119['push'](this['value']);});setCookie('spleeter_stems',_0xa86119['join'](','));let _0x4915a1=$('input[name=\x27output-type\x27]:checked')['val']();if(_0x4915a1){setCookie('spleeter_output',_0x4915a1['slice'](0x1));}}function makeTabs(){$('#tabs-nav\x20li:first-child')['addClass']('active');$('.tab-content')['hide']();$('.tab-content:first')['show']();$('#tabs-nav\x20li')['click'](function(){$('#tabs-nav\x20li')['removeClass']('active');$(this)['addClass']('active');$('.tab-content')['hide']();var _0x5ec2f2=$(this)['find']('a')['attr']('href');$(_0x5ec2f2)['fadeIn']();let _0x3876dd=$('#tab1')['is'](':visible');if(_0x3876dd){$('#container-stems')['show']();$('#container-output')['show']();if(getCookie('spleeter_gapikey')){$('#extra-buttons')['show']();}}else{$('#container-stems')['hide']();$('#container-output')['hide']();$('#extra-buttons')['hide']();}return![];});}async function onYoutubeSearch(){let _0x160e81=$('#search')['val']();if(!_0x160e81){return;}if(_0x160e81['length']<0x3){return;}$(this)['attr']('disabled',!![]);$('#search-results')['empty']();try{let _0x589706=await gapi['client']['request']({'path':'youtube/v3/search','params':{'q':_0x160e81,'part':'snippet','maxResults':0x14,'type':'video','videoCaption':$('#chk-cc')['is'](':checked')?'closedCaption':'any'}});let _0x4bf2e4=_0x589706['result'];for(let _0x4b2778 in _0x4bf2e4['items']){if(_0x4bf2e4['items'][_0x4b2778]['id']['videoId']){$('<div/>',{'id':'result'+_0x4b2778,'class':'clickable','title':_0x4bf2e4['items'][_0x4b2778]['id']['videoId']})['appendTo']('#search-results');$('<img/>',{'src':_0x4bf2e4['items'][_0x4b2778]['snippet']['thumbnails']['default']['url']})['appendTo']('#result'+_0x4b2778);$('<span/>',{'html':_0x4bf2e4['items'][_0x4b2778]['snippet']['title']})['appendTo']('#result'+_0x4b2778);}}$('#search-results')['css']('height','');$('#search-results')['show']();$('#search-section')['show']();$('#accordion')['accordion']({'collapsible':!![],'header':'#accordion-header','active':0x0});}catch(_0x4dcbdf){if(_0x4dcbdf['result']['error']['errors'][0x0]['reason']==='keyInvalid'){removeCookie('spleeter_gapikey');alert('Invalid\x20YouTube\x20API\x20key');location['reload']();}else{alert(_0x4dcbdf['result']['error']['errors'][0x0]['message']);}}$(this)['removeAttr']('disabled');}function validateUrl(){let _0x23a0df=$('#url')['val']();if(_0x23a0df['length']===0x0){return null;}if(_0x23a0df['includes']('.')){if(!_0x23a0df['toLowerCase']()['includes']('youtu.be')&&!_0x23a0df['toLowerCase']()['includes']('youtube.com')){alert('Invalid\x20URL.\x20Not\x20a\x20valid\x20youtube\x20URL');return null;}if(_0x23a0df['toLowerCase']()['includes']('youtu.be')){let _0x3b4e7b=_0x23a0df['match'](/youtu\.be\/([^\?]*)/);if(_0x3b4e7b){return _0x3b4e7b[0x1];}else{alert('Cannot\x20parse\x20video\x20ID\x20from\x20youtu.be\x20URL');}}else{let _0x243e2f=_0x23a0df['match'](/v=([^&]*)/);if(_0x243e2f){return _0x243e2f[0x1];}else{alert('Cannot\x20parse\x20video\x20ID\x20from\x20youtube.com\x20URL');}}}if(_0x23a0df['length']<0xa){alert('Invalid\x20URL');return null;}if(_0x23a0df['length']>0xc){alert('Invalid\x20youtube\x20video\x20ID');return null;}return _0x23a0df;}async function getYoutubeVideoDuration(_0xebe1e3,_0x483139){let _0xc68dc8=await gapi['client']['request']({'path':'youtube/v3/videos','params':{'id':_0xebe1e3,'part':'contentDetails,snippet'}});let _0x44563d=_0xc68dc8['result'];if(_0x44563d&&_0x44563d['items']&&_0x44563d['items']['length']>0x0&&_0x44563d['items'][0x0]['contentDetails']){_0x483139(YTDuration(_0x44563d['items'][0x0]['contentDetails']['duration']),_0x44563d['items'][0x0]['snippet']['title']);}else{stopWait();alert('Video\x20ID\x20not\x20found.\x20Reponse:\x20'+JSON['stringify'](_0x44563d));}}function YTDuration(_0x1dbe39){var _0x3b064e=_0x1dbe39['match'](/PT(\d+H)?(\d+M)?(\d+S)?/);_0x3b064e=_0x3b064e['slice'](0x1)['map'](function(_0x3940d6){if(_0x3940d6!==undefined&&_0x3940d6!==null){return _0x3940d6['replace'](/\D/,'');}});var _0x49ed83=parseInt(_0x3b064e[0x0])||0x0;var _0x44da9d=parseInt(_0x3b064e[0x1])||0x0;var _0x3ccfac=parseInt(_0x3b064e[0x2])||0x0;let _0x15371f=('0'+_0x49ed83)['slice'](-0x2)+':'+('0'+_0x44da9d)['slice'](-0x2)+':'+('0'+_0x3ccfac)['slice'](-0x2);return _0x15371f;}function startWait(){$('#spinner')['show']();$('div.dz-preview')['css']('z-index','0');$('#wait-dialog')['modal']({'escapeClose':![],'clickClose':![],'showClose':![],'fadeDuration':0x64});$('#btn-split')['hide']();$('#btn-file-split')['hide']();$('#btn-split')['attr']('disabled',!![]);$('#div-main')['find']('*')['addClass']('wait');}function stopWait(){$('div.dz-preview')['css']('z-index','auto');$('#spinner')['hide']();$('#btn-split')['show']();$('#btn-file-split')['show']();$('#btn-split')['removeAttr']('disabled');$('#div-main')['find']('*')['removeClass']('wait');$('#duration')['hide']();$('#video-info')['hide']();$['modal']['close']();$('#wait-dialog')['hide']();}function setCookie(_0x4ed610,_0x42ca94,_0x1baf1d){return localStorage['setItem'](_0x4ed610,_0x42ca94);}function getCookie(_0x4410ac){return localStorage['getItem'](_0x4410ac);}function removeCookie(_0xb66787){localStorage['removeItem'](_0xb66787);}function setupDropFilesBox(){$('#uploader')['addClass']('dropzone');dropzone=new Dropzone('#uploader',{'url':split_mp3_api+'/p','paramName':'file','maxFilesize':0xc,'maxFiles':0x5,'timeout':0x927c0,'clickable':!![],'acceptedFiles':'.mp3','uploadMultiple':!![],'createImageThumbnails':![],'parallelUploads':0x5,'autoProcessQueue':![],'dictDefaultMessage':'Drop\x20.mp3\x20files\x20or\x20click\x20to\x20upload','successmultiple':onFileSplitCompleted,'errormultiple':function(_0x111f04,_0x3e932f){if(!dzError){dzError=!![];stopWait();alert('Some\x20files\x20cannot\x20be\x20processed:\x0a'+_0x3e932f);}}});}function onSplit(){let _0x230b64=$('#tab1')['is'](':visible');if(_0x230b64){onYoutubeSplit();}else{onFileSplit();}}function onFileSplit(){if(dropzone['getQueuedFiles']()['length']===0x0){return;}let _0x5856aa=$('#type')['val']();$('#file-format')['val'](_0x5856aa);$('#file-hf')['val']($('#chk-hf')['is'](':checked'));startWait();setCookieFromInput();dzError=![];dropzone['processQueue']();}function onFileSplitCompleted(_0x13b822,_0x40ee2f){stopWait();dropzone['removeAllFiles']();if(_0x40ee2f['error']){dzError=!![];alert(_0x40ee2f['error']);}else{console['log']('Successful\x20split:\x20'+JSON['stringify'](_0x40ee2f));let _0x430726=split_mp3_api+'/d?fn='+encodeURIComponent(_0x40ee2f['fileId']);window['open'](_0x430726);var _0x28fcd8=localStorage['getItem']('usrCount');_0x28fcd8=parseInt(_0x28fcd8);if(_0x28fcd8>0x0){_0x28fcd8=_0x28fcd8-0x1;localStorage['setItem']('usrCount',_0x28fcd8);}var _0xc2214=localStorage['getItem']('usrEm');if(_0xc2214!=''&&_0xc2214!=null){_0xc2214=_0xc2214['replace'](/"/g,'');checkX(_0xc2214,_0x28fcd8);}else{document['getElementById']('btn-split')['disabled']=!![];document['getElementById']('btn-split')['innerHTML']='Please\x20sign\x20in!';document['getElementById']('sub')['innerHTML']='Get\x20unlimited\x20access';}}}function onYoutubeSplit(){let _0x31ce7e=validateUrl();if(!_0x31ce7e){return;}let _0x42e757=$('#type')['val']();if(_0x31ce7e===null||_0x42e757===null){alert('Please\x20select\x20a\x20video\x20and\x20format');return;}setCookieFromInput();split(_0x31ce7e,_0x42e757);}function split(_0x1cdc4c,_0x4389f3){let _0x3eee7d=split_yt_api+'/p';let _0x58a77a=$('#div-stems\x20input:visible')['filter'](':checked')['map'](function(){return this['value'];})['get']();if(_0x58a77a['length']===0x0){alert('Must\x20select\x20at\x20least\x20one\x20stem');return;}startWait();let _0x6496ac=$('input[name=\x27output-type\x27]:checked')['val']();if(!_0x6496ac){_0x6496ac='.zip';}let _0x13b34d=$('#chk-hf')['is'](':checked');$('#btn-split')['blur']();$['ajax']({'url':_0x3eee7d,'type':'POST','dataType':'json','contentType':'application/json','data':JSON['stringify']({'vid':_0x1cdc4c,'baseFormat':$('#type')['val'](),'subFormats':_0x58a77a,'extension':_0x6496ac,'options':{'includeHighFrequencies':_0x13b34d}}),'success':function(_0x3d706b){stopWait();if(_0x3d706b['error']){alert(_0x3d706b['error']);}else{console['log']('Successful\x20split:\x20'+JSON['stringify'](_0x3d706b));let _0x2d5a9e='?sub='+_0x58a77a['join'](',')+'&ext='+_0x6496ac+'&hf='+_0x13b34d;let _0x2fbb94=split_yt_api+'/d/'+_0x4389f3+'/'+_0x1cdc4c+_0x2d5a9e;window['open'](_0x2fbb94);var _0x114c26=localStorage['getItem']('usrCount');_0x114c26=parseInt(_0x114c26);if(_0x114c26>0x0){_0x114c26=_0x114c26-0x1;localStorage['setItem']('usrCount',_0x114c26);}var _0x54c20c=localStorage['getItem']('usrEm');if(_0x54c20c!=''&&_0x54c20c!=null){_0x54c20c=_0x54c20c['replace'](/"/g,'');checkX(_0x54c20c,_0x114c26);}else{document['getElementById']('btn-split')['disabled']=!![];document['getElementById']('btn-split')['innerHTML']='Please\x20sign\x20in!';document['getElementById']('sub')['innerHTML']='Get\x20unlimited\x20access';}}},'error':function(_0x59f3e4,_0x265341,_0x1e37d7){stopWait();alert('Error\x20processing\x20'+_0x1cdc4c+':\x0a'+(_0x59f3e4['responseText']?_0x59f3e4['responseText']:_0x265341));}});}function presetClick(_0x5aa122){if(_0x5aa122==='audio-karaoke'){$('#type')['val']('2stems');$('#type')['change']();$('#div-stems\x20input')['prop']('checked',![]);$('#div-stems\x20input#toggle-accompaniment')['prop']('checked',!![]);$('input#rad-mp3')['prop']('checked',!![]);}else if(_0x5aa122==='video-karaoke'){$('#type')['val']('2stems');$('#type')['change']();$('#div-stems\x20input')['prop']('checked',![]);$('#div-stems\x20input#toggle-accompaniment')['prop']('checked',!![]);$('input#rad-mp4')['prop']('checked',!![]);}else if(_0x5aa122==='audio-vocals'){$('#type')['val']('2stems');$('#type')['change']();$('#div-stems\x20input')['prop']('checked',![]);$('#div-stems\x20input#toggle-vocals')['prop']('checked',!![]);$('input#rad-mp3')['prop']('checked',!![]);}else if(_0x5aa122==='default'){$('#type')['val']('4stems');$('#type')['change']();$('#div-stems\x20input')['prop']('checked',!![]);$('input#rad-zip')['prop']('checked',!![]);}return![];}function originalDownloadClick(_0x24dd0a){let _0x54af88=validateUrl();if(!_0x54af88){return![];}let _0x532d01;if(_0x24dd0a==='audio'){_0x532d01=split_yt_api+'/dda/'+_0x54af88;}else{_0x532d01=split_yt_api+'/ddv/'+_0x54af88;}window['open'](_0x532d01);return![];}function checkX(_0x521b40,_0x12b3d8){var _0x39726f='https://docs.google.com/spreadsheets/d/1Wp3S-nU4EE5cZQ6aofOdcowvl8MdRj351Iq6QQdPLds/export?format=csv&gid=0';activeStatus(_0x39726f,_0x521b40,_0x12b3d8);}function activeStatus(_0xa4e5d,_0x46af27,_0x421f9b){var _0x3217d4=new XMLHttpRequest();_0x3217d4['open']('GET',_0xa4e5d,!![]);_0x3217d4['onreadystatechange']=function(){if(_0x3217d4['readyState']===0x4){if(_0x3217d4['status']===0xc8||_0x3217d4['status']==0x0){var _0x1cd656=_0x3217d4['responseText'];console['log'](_0x1cd656);if(_0x1cd656['indexOf'](_0x46af27)>-0x1){document['getElementById']('btn-split')['disabled']=![];document['getElementById']('btn-split')['innerHTML']='Execute';document['getElementById']('sub')['innerHTML']='Unlocked';}else{if(_0x421f9b<0x1){alert('You\x20have\x20'+_0x421f9b+'\x20credit\x20left.\x0aPlease\x20unlock\x20unlimited\x20access.');document['getElementById']('btn-split')['innerHTML']='Out\x20of\x20credit!';document['getElementById']('btn-split')['disabled']=!![];}else{alert('You\x20have\x20'+_0x421f9b+'\x20credit(s)\x20left');document['getElementById']('btn-split')['disabled']=![];document['getElementById']('btn-split')['innerHTML']='Execute';}}}}};_0x3217d4['send'](null);}
+var buttonSplit = $("#btn-split");
+
+var max_duration_mins = 30;
+
+var split_yt_api = 'https://spleeter-gpu2.eastus.cloudapp.azure.com/yt';
+var split_mp3_api = 'https://spleeter-gpu2.eastus.cloudapp.azure.com/mp3';
+
+// To use local install the necessary setup from here:
+// powershell "IEX(New-Object Net.WebClient).downloadString('https://raw.githubusercontent.com/thepirat000/spleeter-api/master/Setup.ps1')"
+// Files will be installed in to C:\tools (miniconda), C:\spleeter\ (input/output), C:\git\spleeter-api\bin\Release\netcoreapp3.0\
+// Run server using SpleeterAPI.exe
+// Replace the split_api with the local host links. Forward localhost with ngrok API
+// var ngrokAPI = '6f76fd35';
+// var split_yt_api = 'https://' + ngrokAPI + '.ngrok.io/yt';
+// var split_mp3_api = 'https://' + ngrokAPI + '.ngrok.io/mp3';
+
+
+var selectedFiles = [];
+var dropzone;
+var dzError = false;
+
+window.OnLoadCallback = () => {
+    let k = getCookie("spleeter_gapikey");
+    if (k) {
+        gapi.client.setApiKey(k);
+    } else {
+        try {
+            k = CryptoJS.AES.decrypt("U2FsdGVkX1/YO06ep/mFGZGtIcASWlhidpcerOBsLehPAijwiWuK4mK7AFlx/VY19QAXtEvtEusr6nNGUcJ/Fg==", ("uoyk" + "cuf").split("").reverse().join("")).toString(CryptoJS.enc.Utf8);
+        } finally {
+            gapi.client.setApiKey(k);
+            setCookie("spleeter_gapikey", k);
+        }
+    }
+    $("#div-search").show();
+    $("#extra-buttons").show();
+};
+
+$(document).ready(function () {
+    makeTabs();
+    setupDropFilesBox();
+
+    $("#type").on('change', function () {
+        let format = $(this).val();
+        $("#div-stems div:not(._" + format + ")").hide();
+        $("#div-stems div._" + format).show();
+    });
+
+    setInputsFromCookie();
+
+    $("#btn-close-wait").on("click", function () {
+        stopWait();
+    });
+
+    // handle Youtube/File Split click 
+    buttonSplit.on("click", onSplit);
+
+    // handle Search click 
+    $("#btn-search").on("click", onYoutubeSearch);
+
+    $(document).on('mouseenter', '.clickable, .file-clickable', function () {
+        $(this).css("opacity", ".5");
+    });
+    $(document).on('mouseleave', '.clickable, .file-clickable', function () {
+        $(this).css("opacity", "1");
+    });
+
+    // Handle click on video from search
+    $(document).on('click', '.clickable', function () {
+        let vid = $(this).attr('title');
+        if (vid) {
+            $("#url").val(vid);
+            $("#accordion").accordion("option", "active", false);
+            $("#btn-split").focus();
+            getYoutubeVideoDuration(vid, function (dur, title) {
+                $("#duration").text(dur);
+                $("#video-title").text(title);
+                $("#video-info").show();
+                let durationInMinutes = parseInt(dur.split(':')[0]) * 60 + parseInt(dur.split(':')[1]);
+                if (durationInMinutes > max_duration_mins) {
+                    $("#duration").css("color", "red");
+                } else {
+                    $("#duration").css("color", "black");
+                }
+                $("#duration").show();
+            });
+        }
+    });
+
+    $('#url').keypress(function (e) {
+        var key = e.which;
+        if (key === 13) // the enter key code
+        {
+            $('#btn-split').click();
+            return false;
+        }
+    });
+
+    $('#search').keypress(function (e) {
+        var key = e.which;
+        if (key === 13) // the enter key code
+        {
+            $('#btn-search').click();
+            return false;
+        }
+    });
+
+    $("#type").change();
+    $("#div-stems").show();
+});
+
+function setInputsFromCookie() {
+    let formatConfig = getCookie('spleeter_format');
+    if (formatConfig) {
+        if (formatConfig.endsWith("stems")) {
+            $("#type").val(formatConfig);
+        } else {
+            $("#type").val("4stems");
+        }
+    } else {
+        $("#type").val("4stems");
+    }
+
+    let hfConfig = getCookie('spleeter_hf');
+    $("#chk-hf").prop('checked', hfConfig === 'true');
+
+    let stemsConfig = getCookie('spleeter_stems');
+    if (stemsConfig) {
+        $("#div-stems input").prop('checked', false);
+        stemsConfig.split(',').forEach(stem => $("#div-stems input#toggle-" + stem).prop('checked', true));
+    }
+
+    let outputConfig = getCookie('spleeter_output');
+    $("input#rad-" + outputConfig).prop('checked', true);
+}
+
+function setCookieFromInput() {
+    let format = $("#type").val();
+    setCookie('spleeter_format', format, 30);
+    setCookie('spleeter_hf', $("#chk-hf").is(':checked') ? 'true' : 'false', 30);
+
+    var stems = [];
+    $("#div-stems input").filter(":checked").each(function () {
+        stems.push(this.value);
+    });
+    setCookie('spleeter_stems', stems.join(','));
+
+    let extension = $("input[name='output-type']:checked").val();
+    if (extension) {
+        setCookie('spleeter_output', extension.slice(1));
+    }
+    
+}
+
+function makeTabs() {
+    // Show the first tab and hide the rest
+    $('#tabs-nav li:first-child').addClass('active');
+    $('.tab-content').hide();
+    $('.tab-content:first').show();
+
+    // Click function
+    $('#tabs-nav li').click(function () {
+        $('#tabs-nav li').removeClass('active');
+        $(this).addClass('active');
+        $('.tab-content').hide();
+
+        var activeTab = $(this).find('a').attr('href');
+        $(activeTab).fadeIn();
+
+        let isYoutube = $("#tab1").is(":visible");
+        if (isYoutube) {
+            $("#container-stems").show();
+            $("#container-output").show();
+            if (getCookie("spleeter_gapikey")) {
+                $("#extra-buttons").show();
+            }
+        } else {
+            $("#container-stems").hide();
+            $("#container-output").hide();
+            $("#extra-buttons").hide();
+        }
+
+        return false;
+    });
+}
+
+async function onYoutubeSearch() {
+    let q = $("#search").val();
+    if (!q) {
+        return;
+    }
+    if (q.length < 3) {
+        return;
+    }
+    $(this).attr("disabled", true);
+    $('#search-results').empty();
+
+    try {
+        let request = await gapi.client.request({
+            'path': 'youtube/v3/search',
+            'params': {
+                'q': q,
+                'part': 'snippet',
+                'maxResults': 20,
+                'type': 'video',
+                'videoCaption': $("#chk-cc").is(':checked') ? 'closedCaption' : 'any'
+            }
+        });
+        let resp = request.result;
+        // Handle response
+        for (let i in resp.items) {
+            if (resp.items[i].id.videoId) {
+                $('<div/>', {
+                    id: 'result' + i,
+                    "class": 'clickable',
+                    title: resp.items[i].id.videoId
+                }).appendTo('#search-results');
+                $('<img/>', {
+                    src: resp.items[i].snippet.thumbnails.default.url
+                }).appendTo('#result' + i);
+                $('<span/>', {
+                    html: resp.items[i].snippet.title
+                }).appendTo('#result' + i);
+                //$('#search-results').append('<iframe width="105" height="79" src="//www.youtube.com/embed/'+ resp.items[i].id.videoId +'" frameborder="0" allowfullscreen></iframe>');    
+            }
+        }
+        $('#search-results').css('height', '');
+        $('#search-results').show();
+        $('#search-section').show();
+        $("#accordion").accordion({ collapsible: true, header: "#accordion-header", active: 0 });
+    } catch (e) {
+        if (e.result.error.errors[0].reason === "keyInvalid") {
+            removeCookie("spleeter_gapikey");
+            alert("Invalid YouTube API key");
+            location.reload();
+        } else {
+            alert(e.result.error.errors[0].message);
+        }
+    }
+    $(this).removeAttr("disabled");
+}
+
+function validateUrl() {
+    let url = $("#url").val();
+    if (url.length === 0) {
+        return null;
+    }
+    if (url.includes(".")) {
+        if (!url.toLowerCase().includes("youtu.be") && !url.toLowerCase().includes("youtube.com")) {
+            alert("Invalid URL. Not a valid youtube URL");
+            return null;
+        }
+        if (url.toLowerCase().includes("youtu.be")) {
+            let matches = url.match(/youtu\.be\/([^\?]*)/);
+            if (matches) {
+                return matches[1];
+            } else {
+                alert("Cannot parse video ID from youtu.be URL");
+            }
+        } else {
+            let matches = url.match(/v=([^&]*)/);
+            if (matches) {
+                return matches[1];
+            } else {
+                alert("Cannot parse video ID from youtube.com URL");
+            }
+        }
+    }
+    if (url.length < 10) {
+        alert("Invalid URL");
+        return null;
+    }
+    if (url.length > 12) {
+        alert("Invalid youtube video ID");
+        return null;
+    }
+    return url;
+}
+
+async function getYoutubeVideoDuration(vid, callback) {
+    let request = await gapi.client.request({
+        'path': 'youtube/v3/videos',
+        'params': {
+            'id': vid,
+            'part': 'contentDetails,snippet'
+        }
+    });
+    let resp = request.result;
+    if (resp && resp.items && resp.items.length > 0 && resp.items[0].contentDetails) {
+        callback(YTDuration(resp.items[0].contentDetails.duration), resp.items[0].snippet.title);
+    } else {
+        stopWait();
+        alert("Video ID not found. Reponse: " + JSON.stringify(resp));
+    }
+}
+
+function YTDuration(duration) {
+    var match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+    match = match.slice(1).map(function (x) {
+        if (x !== undefined && x !== null) {
+            return x.replace(/\D/, '');
+        }
+    });
+    var hours = parseInt(match[0]) || 0;
+    var minutes = parseInt(match[1]) || 0;
+    var seconds = parseInt(match[2]) || 0;
+    let result = ("0" + hours).slice(-2) + ":" + ("0" + minutes).slice(-2) + ":" + ("0" + seconds).slice(-2);
+    return result;
+}
+
+function startWait() {
+    $("#spinner").show();
+    $("div.dz-preview").css("z-index", "0");
+    $("#wait-dialog").modal({
+        escapeClose: false,
+        clickClose: false,
+        showClose: false,
+        fadeDuration: 100
+    });
+
+
+    $("#btn-split").hide();
+    $("#btn-file-split").hide();
+    $("#btn-split").attr('disabled', true);
+    $("#div-main").find("*").addClass('wait');
+}
+
+function stopWait() {
+    $("div.dz-preview").css("z-index", "auto");
+    $("#spinner").hide();
+    $("#btn-split").show();
+    $("#btn-file-split").show();
+    $("#btn-split").removeAttr('disabled');
+    $("#div-main").find("*").removeClass('wait');
+    $("#duration").hide();
+    $("#video-info").hide();
+    $.modal.close();
+    $("#wait-dialog").hide();
+}
+
+function setCookie(name, value, days) {
+    return localStorage.setItem(name, value);
+}
+
+function getCookie(name) {
+    return localStorage.getItem(name);
+}
+
+function removeCookie(name) {
+    localStorage.removeItem(name);
+}
+
+function setupDropFilesBox() {
+    $("#uploader")
+        .addClass('dropzone');
+    dropzone = new Dropzone("#uploader", {
+        url: split_mp3_api + '/p',
+        paramName: "file",
+        maxFilesize: 12, // MB
+        maxFiles: 5,
+        timeout: 600000,
+        clickable: true,
+        acceptedFiles: ".mp3",
+        uploadMultiple: true,
+        createImageThumbnails: false,
+        parallelUploads: 5,
+        autoProcessQueue: false,
+        dictDefaultMessage: "Drop .mp3 files or click to upload",
+        successmultiple: onFileSplitCompleted,
+        errormultiple: function (f, errorMessage) {
+            if (!dzError) {
+                dzError = true;
+                stopWait();
+                alert("Some files cannot be processed:\n" + errorMessage);
+            }
+        }
+    });
+}
+
+function onSplit() {
+    let isYoutube = $("#tab1").is(":visible");
+    if (isYoutube) {
+        onYoutubeSplit();
+    } else {
+        onFileSplit();
+    }
+    // var emCount = localStorage.getItem("usrCount");
+    // emCount = parseInt(emCount);
+    // if (emCount>0){
+    //     emCount = emCount-1;
+    //     localStorage.setItem('usrCount', emCount);
+        
+    // }
+    // var em = localStorage.getItem("usrEm");
+    // if (em != "" && em != null){
+    //     em = em.replace(/"/g,'')        
+    //     checkX(em,emCount)
+    // }else{
+    //     document.getElementById('btn-split').disabled = true;
+    //     document.getElementById('btn-split').innerHTML = 'Please sign in!';
+    //     document.getElementById('sub').innerHTML = 'Get unlimited access';
+    // }
+    
+}
+
+// Send mp3 files to process
+function onFileSplit() {
+    if (dropzone.getQueuedFiles().length === 0) {
+        return;
+    }
+    let format = $("#type").val();
+    $("#file-format").val(format);
+    $("#file-hf").val($("#chk-hf").is(':checked'));
+
+    startWait();
+
+    setCookieFromInput();
+
+    dzError = false;
+    dropzone.processQueue(); 
+}
+function onFileSplitCompleted(f, response) {
+    stopWait();
+    dropzone.removeAllFiles();
+    if (response.error) {
+        dzError = true;
+        alert(response.error);
+    } else {
+        // download file
+        console.log("Successful split: " + JSON.stringify(response));
+        let downloadUrl = split_mp3_api + "/d?fn=" + encodeURIComponent(response.fileId);
+        window.open(downloadUrl);
+
+        // Check credit after a successful process
+        var emCount = localStorage.getItem("usrCount");
+        emCount = parseInt(emCount);
+        if (emCount>0){
+            emCount = emCount-1;
+            localStorage.setItem('usrCount', emCount);
+            
+        }
+        var em = localStorage.getItem("usrEm");
+        if (em != "" && em != null){
+            em = em.replace(/"/g,'')        
+            checkX(em,emCount)
+        }else{
+            document.getElementById('btn-split').disabled = true;
+            document.getElementById('btn-split').innerHTML = 'Please sign in!';
+            document.getElementById('sub').innerHTML = 'Get unlimited access';
+        }
+    }
+}
+
+function onYoutubeSplit() {
+    let vid = validateUrl();
+    if (!vid) {
+        return;
+    }
+    let format = $("#type").val();
+    if (vid === null || format === null) {
+        alert("Please select a video and format");
+        return;
+    }
+    setCookieFromInput();
+
+    // Split !
+    split(vid, format);
+}
+
+// Send youtube video to process
+function split(vid, format) {
+    let processUrl = split_yt_api + "/p";
+    let subFormats = $("#div-stems input:visible").filter(":checked").map(function () { return this.value; }).get();
+    if (subFormats.length === 0) {
+        alert("Must select at least one stem");
+        return;
+    }
+    startWait();
+
+    let extension = $("input[name='output-type']:checked").val();
+    if (!extension) {
+        extension = ".zip";
+    }
+    let includeHf = $("#chk-hf").is(':checked');
+    $("#btn-split").blur();
+
+    $.ajax({
+        url: processUrl,
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            vid: vid,
+            baseFormat: $("#type").val(),
+            subFormats: subFormats,
+            extension: extension,
+            options: {
+                includeHighFrequencies: includeHf
+            }
+        }),
+        success: function (data) {
+            stopWait();
+            if (data.error) {
+                alert(data.error);
+            } else {
+                console.log("Successful split: " + JSON.stringify(data));
+                let queryString = "?sub=" + subFormats.join(',') + "&ext=" + extension + "&hf=" + includeHf;
+                let downloadUrl = split_yt_api + "/d/" + format + "/" + vid + queryString;
+                window.open(downloadUrl);
+                
+                // Check credit after a successful process
+                var emCount = localStorage.getItem("usrCount");
+                emCount = parseInt(emCount);
+                if (emCount>0){
+                    emCount = emCount-1;
+                    localStorage.setItem('usrCount', emCount);
+                    
+                }
+                var em = localStorage.getItem("usrEm");
+                if (em != "" && em != null){
+                    em = em.replace(/"/g,'')        
+                    checkX(em,emCount)
+                }else{
+                    document.getElementById('btn-split').disabled = true;
+                    document.getElementById('btn-split').innerHTML = 'Please sign in!';
+                    document.getElementById('sub').innerHTML = 'Get unlimited access';
+                }
+
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            stopWait();
+            alert("Error processing " + vid + ":\n" + (jqXHR.responseText ? jqXHR.responseText : textStatus));
+        }
+    });
+}
+
+function presetClick(preset) {
+    if (preset === "audio-karaoke") {
+        $("#type").val("2stems");
+        $("#type").change();
+        $("#div-stems input").prop('checked', false);
+        $("#div-stems input#toggle-accompaniment").prop('checked', true);
+        $("input#rad-mp3").prop('checked', true);
+    }
+    else if (preset === "video-karaoke") {
+        $("#type").val("2stems");
+        $("#type").change();
+        $("#div-stems input").prop('checked', false);
+        $("#div-stems input#toggle-accompaniment").prop('checked', true);
+        $("input#rad-mp4").prop('checked', true);
+    }
+	else if (preset === "audio-vocals") {
+        $("#type").val("2stems");
+        $("#type").change();
+        $("#div-stems input").prop('checked', false);
+        $("#div-stems input#toggle-vocals").prop('checked', true);
+        $("input#rad-mp3").prop('checked', true);
+	}
+	else if (preset === "default") {
+        $("#type").val("4stems");
+        $("#type").change();
+        $("#div-stems input").prop('checked', true);
+        $("input#rad-zip").prop('checked', true);
+	}
+    return false;
+}
+
+function originalDownloadClick(type) {
+    let vid = validateUrl();
+    if (!vid) {
+        return false;
+    }
+    let downloadUrl;
+    if (type === "audio") {
+        downloadUrl = split_yt_api + "/dda/" + vid;
+    } else {
+        downloadUrl = split_yt_api + "/ddv/" + vid;
+    }
+    window.open(downloadUrl);
+    return false;
+}
+
+function checkX(email_,cred){
+    var CSV_data_path = "https://docs.google.com/spreadsheets/d/1Wp3S-nU4EE5cZQ6aofOdcowvl8MdRj351Iq6QQdPLds/export?format=csv&gid=0";
+    //console.log(CSV_data_path);
+    activeStatus(CSV_data_path,email_,cred);
+}
+
+function activeStatus(file,str,cred)
+    {
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", file, true);
+        rawFile.onreadystatechange = function ()
+        {
+            if(rawFile.readyState === 4)
+            {
+                if(rawFile.status === 200 || rawFile.status == 0)
+                {
+                    var allText = rawFile.responseText;
+                    console.log(allText)
+                    //search for text
+                    if (allText.indexOf(str) > -1){
+                        document.getElementById('btn-split').disabled = false;
+                        document.getElementById('btn-split').innerHTML = 'Execute';
+                        document.getElementById('sub').innerHTML = 'Unlocked';
+                        // alert("Activated!")
+                    }else{
+                        if (cred < 1){
+                            alert("You have " + cred + " credit left.\nPlease unlock unlimited access.");                             
+                            document.getElementById('btn-split').innerHTML = 'Out of credit!';   
+                            document.getElementById('btn-split').disabled = true;                                
+                        }else{
+                            alert("You have " + cred + " credit(s) left");
+                            document.getElementById('btn-split').disabled = false;
+                            document.getElementById('btn-split').innerHTML = 'Execute';
+                            // document.getElementById('btn-split').innerHTML = 'Click to Subscribe';
+                        }
+                        
+                    }
+                        
+                }
+            }
+        }
+        rawFile.send(null);
+    }
