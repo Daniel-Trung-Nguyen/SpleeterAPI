@@ -103,7 +103,7 @@ $(document).ready(function () {
     };
     var form = $('form#activateForm'),
         url =
-        'https://script.google.com/macros/u/4/s/AKfycbw8EL_8P7WgunNEe0Lz21jAUptCOdfi4E_iSNtEsQqjV-umlMvJJHYk_A/exec';
+        'https://script.google.com/macros/s/AKfycbw8EL_8P7WgunNEe0Lz21jAUptCOdfi4E_iSNtEsQqjV-umlMvJJHYk_A/exec';
     form.submit(function (e) {
         e.preventDefault();
 
