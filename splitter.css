@@ -321,3 +321,7 @@ select {
 .text-muted {
 	background-color: lightgray;
 }
+
+#div-client-geo {
+    font-size: x-small;
+}
