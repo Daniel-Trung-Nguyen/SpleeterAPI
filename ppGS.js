@@ -1,1 +1,118 @@
-(function(_0x562b0b,_0x589214){var _0x174d7e={'currency_code':_0x589214,'value':'8.99'},_0x5d663f={'currency_code':_0x589214,'value':'0.00'},_0x1a3d01=function(){paypal['Buttons']({'createOrder':function(_0x3ee406,_0x12e773){return _0x12e773['order']['create']({'application_context':{'brand_name':'Skill-Express','landing_page':'BILLING','shipping_preference':'NO_SHIPPING','payment_method':{'payee_preferred':'UNRESTRICTED'}},'purchase_units':[{'description':'Instrumental\x20tracks\x20for\x20personal\x20use','soft_descriptor':'SKILLEXPRESS','amount':{'breakdown':{'item_total':_0x174d7e,'tax_total':_0x5d663f},'value':'8.99'},'items':[{'name':'SEK\x20Spleeter\x20Online\x20Access','quantity':0x1,'description':'Unlimited\x20Credit\x20for\x20SEK\x20Spleeter\x20Online','sku':'DIO2','unit_amount':_0x174d7e,'tax':_0x5d663f}]}]});},'onApprove':function(_0x413a1f,_0x58d1fd){return _0x58d1fd['order']['capture']()['then'](function(_0x41a251){paymentComplete('complete');});},'onCancel':function(_0xa2695c){},'onError':function(_0x3308f0){_0x562b0b['innerHTML']='<pre>'+_0x3308f0['toString']();}})['render']('#digitalgoods-130520063406-dio2');},_0x1dca07=function(){var _0x4e60a3=document['createElement']('script');_0x4e60a3['type']='text/javascript';_0x4e60a3['src']='https://www.paypal.com/sdk/js?client-id=AcHQjBYf739Uq5_9813poHLjpF46x6EcUZDCSoFAA7mN4uVRQGlLVTBarPv9EAUNPL8PU77WlKizYTYu&currency=USD';_0x4e60a3['onload']=_0x1a3d01;_0x562b0b['appendChild'](_0x4e60a3);};_0x1dca07();}(document['getElementById']('digitalgoods-130520063406-dio2'),'USD'));function paymentComplete(_0x463fa2){if(_0x463fa2==='complete'){$('div.payment-received')['removeClass']('hide');$('div.payment-form')['addClass']('hide');}else{$('div.payment-error')['removeClass']('hide');}}function activated(){var _0x7ec4ed=new Date();_0x7ec4ed['setFullYear'](_0x7ec4ed['getFullYear']()+0x1);$('span#expiration')['text'](_0x7ec4ed);$('div.activated')['removeClass']('hide');$('div.payment-received')['addClass']('hide');}$(document)['ready'](function(){$['fn']['serializeObject']=function(){var _0x20f4ab={};var _0x3e10d1=this['serializeArray']();$['each'](_0x3e10d1,function(){if(_0x20f4ab[this['name']]){if(!_0x20f4ab[this['name']]['push']){_0x20f4ab[this['name']]=[_0x20f4ab[this['name']]];}_0x20f4ab[this['name']]['push'](this['value']||'');}else{_0x20f4ab[this['name']]=this['value']||'';}});return _0x20f4ab;};var _0x1c95d9=$('form#activateForm'),_0x19ca2d='https://script.google.com/macros/s/AKfycbznmh7eIM_LRnaHe7wor-m2nMgjD3RPSdcH5J55Mg8YmS7b4fTx/exec';_0x1c95d9['submit'](function(_0x8016c1){_0x8016c1['preventDefault']();var _0x129e7f=$['ajax']({'url':_0x19ca2d,'method':'GET','dataType':'json','data':_0x1c95d9['serializeObject']()});activated();});});
+// Payment button
+(function (div, currency) {
+    var item_total = {
+            currency_code: currency,
+            value: '14.99',
+        },
+        tax_total = {
+            currency_code: currency,
+            value: '0.00'
+        },
+        render = function () {
+            paypal.Buttons({
+                createOrder: function (data, actions) {
+                    return actions.order.create({
+                        application_context: {
+                            brand_name: "Skill-Express",
+                            landing_page: "BILLING",
+                            shipping_preference: "NO_SHIPPING",
+                            payment_method: {
+                                payee_preferred: "UNRESTRICTED"
+                            }
+                        },
+                        purchase_units: [{
+                            description: "Instrumental tracks for personal use",
+                            soft_descriptor: "SKILLEXPRESS",
+                            amount: {
+                                breakdown: {
+                                    item_total: item_total,
+                                    tax_total: tax_total
+                                },
+                                value: '14.99'
+                            },
+                            items: [{
+                                name: "SEK Spleeter Online Access",
+                                quantity: 1,
+                                description: "Unlimited Credit for SEK Spleeter Online",
+                                sku: "DIO2",
+                                unit_amount: item_total,
+                                tax: tax_total
+                            }]
+                        }]
+                    });
+                },
+                onApprove: function (data, actions) {
+                    return actions.order.capture().then(function (details) {
+                        // div.innerHTML = "Order received!";
+                        paymentComplete('complete');
+                    });
+                },
+                onCancel: function (data) {},
+                onError: function (err) {
+                    div.innerHTML = "<pre>" + err.toString()
+                }
+            }).render("#digitalgoods-130520063406-dio2");
+        },
+        init = function () {
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src =
+                "https://www.paypal.com/sdk/js?client-id=AcHQjBYf739Uq5_9813poHLjpF46x6EcUZDCSoFAA7mN4uVRQGlLVTBarPv9EAUNPL8PU77WlKizYTYu\x26currency=USD";
+            script.onload = render;
+            div.appendChild(script);
+        };
+    init();
+})(document.getElementById("digitalgoods-130520063406-dio2"), "USD");
+
+function paymentComplete(status) {
+    if (status === "complete") {
+        $("div.payment-received").removeClass("hide");
+        $("div.payment-form").addClass("hide");
+    } else {
+        $("div.payment-error").removeClass("hide");
+    }
+}
+
+
+function activated() {
+    var oneYearFromNow = new Date();
+    oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+
+    $("span#expiration").text(oneYearFromNow);
+    $("div.activated").removeClass("hide");
+    $("div.payment-received").addClass("hide");
+    // $("div.payment-form").addClass("hide");
+}
+
+// Send data to form
+$(document).ready(function () {
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+    var form = $('form#activateForm'),
+        url =
+        'https://script.google.com/macros/s/AKfycbznmh7eIM_LRnaHe7wor-m2nMgjD3RPSdcH5J55Mg8YmS7b4fTx/exec';
+    form.submit(function (e) {
+        e.preventDefault();
+
+        var jqxhr = $.ajax({
+            url: url,
+            method: "GET",
+            dataType: "json",
+            data: form.serializeObject()
+        });
+        activated()
+    });
+});
