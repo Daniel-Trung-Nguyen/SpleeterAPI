@@ -33,6 +33,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+    <div id="server-down-div" style="display: none;">
+        <h2>Server currently down</h2>
+        <p id="server-down-text"></p>
+    </div>
+
     <div id="big-one" style="max-width: 640px; margin: 0 auto;">
 
         <div class="banner-message"> 
@@ -67,6 +72,10 @@
                     <a href="video/karaoke" onclick="return presetClick('video-karaoke');">Video Karaoke</a>
                     |
                     <a href="audio/vocals" onclick="return presetClick('audio-vocals');">Vocals</a>
+                    |
+                    <a href="audio/bassless" onclick="return presetClick('audio-bassless');">Bassless</a>
+                    |
+                    <a href="audio/drumless" onclick="return presetClick('audio-drumless');">Drumless</a>
                     |
                     <a href="default" onclick="return presetClick('default');">Default</a>
                 </div>
@@ -204,11 +213,17 @@
                 <div class="container">
                     <!-- <p>&copy; Skill-Express - <a id="sub" href="https://www.skill-express.com/">Click to Subscribe</a></p> -->
                     <!-- <p>&copy; Skill-Express - <button id="sub" onclick="load_html();">Click to Subscribe</button></p> -->
-                    <p><a href="https://www.skill-express.com/sh" target="_blank">FAQ</a> - <a id="sub" href="premium.html" rel="modal:open">Unlock unlimited access</a> - <a href="https://www.skill-express.com/ps" target="_blank"> Get desktop version</a></p>
+                    <p>&copy; Skill-Express - <a id="sub" href="premium.html" rel="modal:open">Click to Subscribe</a></p>
                     <!-- <span style="margin: 0 auto; padding: 10px 0px 0px 0px; vertical-align: middle;"><a href="https://www.paypal.me/skillexpressUS"><img src="https://img.shields.io/badge/Sponsor-critical" /></a></span> -->
-                    <span style="margin: 0 auto; padding: 10px 0px 0px 0px; vertical-align: middle;"> &copy; Skill-Express </span>
+                    <!-- <span>
+                        style="margin: 0 auto; padding: 10px 0px 0px 0px; vertical-align: middle;"> test 
+                    </span> -->
                 </div>
             </footer>
+
+            <div id="div-client-geo">
+                <span id="client-geo"></span>
+            </div>
 
         </div>
     </div>
@@ -216,10 +231,7 @@
     <div id="wait-dialog" class="modal">
         <div class="loader" id="spinner" style="display:none;"></div>
         <div>
-            Processing in queue. Please wait a few minutes...
-        </div>
-        <div>            
-            Want to skip the queue? Try our desktop software.
+            Processing. Please wait a few minutes...
         </div>
         <button id="btn-close-wait">Close</button>
     </div>

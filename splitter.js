@@ -10,9 +10,9 @@ var split_mp3_api = 'https://spleeter-gpu2.eastus.cloudapp.azure.com/mp3';
 // Files will be installed in to C:\tools (miniconda), C:\spleeter\ (input/output), C:\git\spleeter-api\bin\Release\netcoreapp3.0\
 // Run server using SpleeterAPI.exe
 // Replace the split_api with the local host links. Forward localhost with ngrok API
-//var ngrokAPI = '3af38f3dfc75';
-//var split_yt_api = 'https://' + ngrokAPI + '.ngrok.io/yt';
-//var split_mp3_api = 'https://' + ngrokAPI + '.ngrok.io/mp3';
+// var ngrokAPI = '6f76fd35';
+// var split_yt_api = 'https://' + ngrokAPI + '.ngrok.io/yt';
+// var split_mp3_api = 'https://' + ngrokAPI + '.ngrok.io/mp3';
 
 
 var selectedFiles = [];
@@ -36,6 +36,7 @@ window.OnLoadCallback = () => {
 };
 
 $(document).ready(function () {
+    TestConnectivity();
     makeTabs();
     setupDropFilesBox();
 
@@ -556,6 +557,20 @@ function presetClick(preset) {
         $("#div-stems input#toggle-vocals").prop('checked', true);
         $("input#rad-mp3").prop('checked', true);
 	}
+    else if (preset === "audio-bassless") {
+        $("#type").val("4stems");
+        $("#type").change();
+        $("#div-stems input").prop('checked', true);
+        $("#div-stems input#toggle-bass").prop('checked', false);
+        $("input#rad-mp3").prop('checked', true);
+	}
+	else if (preset === "audio-drumless") {
+        $("#type").val("4stems");
+        $("#type").change();
+        $("#div-stems input").prop('checked', true);
+        $("#div-stems input#toggle-drums").prop('checked', false);
+        $("input#rad-mp3").prop('checked', true);
+	}
 	else if (preset === "default") {
         $("#type").val("4stems");
         $("#type").change();
@@ -623,3 +638,39 @@ function activeStatus(file,str,cred)
         }
         rawFile.send(null);
     }
+
+// Added these from the master brand
+function TestConnectivity() {
+    let testUrl = split_yt_api.replace("/yt", "/test");
+    $("#server-down-text").html('');
+    var opts = {
+        method: 'GET',
+        headers: {}
+    };
+    fetchTimeout(testUrl, opts, 4000)
+        .then(function (response) {
+            $("#server-down-div").toggle(!response.ok);
+            return response.json();
+        })
+        .then(json => {
+            let ip = json.ClientIp;
+            let geo = json.ClientGeo;
+            if (ip && ip.length > 4) {
+                $("#client-geo").html("Your IP address is " + ip + " (" + geo + ")");
+            }
+        })
+        .catch(function (error) {
+            $("#server-down-div").show();
+            $("#server-down-text").html(error);
+        });
+
+}
+
+function fetchTimeout(url, options, timeout) {
+    return Promise.race([
+        fetch(url, options),
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('timeout')), timeout)
+        )
+    ]);
+}
