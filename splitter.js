@@ -2,9 +2,11 @@ var buttonSplit = $("#btn-split");
 
 var max_duration_mins = 30;
 
-var split_yt_api = 'https://spleeter-gpu2.eastus.cloudapp.azure.com/yt';
-var split_mp3_api = 'https://spleeter-gpu2.eastus.cloudapp.azure.com/mp3';
+// var split_yt_api = 'https://spleeter-gpu2.eastus.cloudapp.azure.com/yt';
+// var split_mp3_api = 'https://spleeter-gpu2.eastus.cloudapp.azure.com/mp3';
 
+var split_yt_api = 'https://spleeter.westus.cloudapp.azure.com/yt';
+var split_mp3_api = 'https://spleeter.westus.cloudapp.azure.com/mp3';
 // To use local install the necessary setup from here:
 // powershell "IEX(New-Object Net.WebClient).downloadString('https://raw.githubusercontent.com/thepirat000/spleeter-api/master/Setup.ps1')"
 // Files will be installed in to C:\tools (miniconda), C:\spleeter\ (input/output), C:\git\spleeter-api\bin\Release\netcoreapp3.0\
