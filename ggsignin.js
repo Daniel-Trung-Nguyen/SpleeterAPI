@@ -1,1 +1,115 @@
-function onSignIn(_0x4c1050){var _0x5dea05=_0x4c1050['getBasicProfile']();console['log']('ID:\x20'+_0x5dea05['getId']());console['log']('Name:\x20'+_0x5dea05['getName']());console['log']('Image\x20URL:\x20'+_0x5dea05['getImageUrl']());console['log']('Email:\x20'+_0x5dea05['getEmail']());var _0x8ce85e=_0x5dea05['getEmail']();var _0x341e9a=document['querySelector']('#user');_0x341e9a['innerHTML']='<strong>'+_0x8ce85e+'</strong>';$('#signin')['hide']();$('#signout')['show']();$('#user')['show']();localStorage['setItem']('usrEm',JSON['stringify'](_0x8ce85e));var _0xb931d1=localStorage['getItem']('usrCount');if(_0xb931d1==''||_0xb931d1==null){_0xb931d1=0x5;localStorage['setItem']('usrCount',_0xb931d1);}var _0x3c1f5e=gapi['auth2']['getAuthInstance']();_0x3c1f5e['signOut']()['then'](function(){});checkX(_0x8ce85e,_0xb931d1);}function signOut(){$('#signin')['show']();$('#signout')['hide']();$('#user')['hide']();var _0x1d3388=document['querySelector']('#user');_0x1d3388['innerHTML']='';localStorage['setItem']('usrEm','');document['getElementById']('btn-split')['disabled']=!![];document['getElementById']('btn-split')['innerHTML']='Please\x20sign\x20in!';document['getElementById']('sub')['innerHTML']='Unlock\x20unlimited\x20access';}function checkX(_0x469b21,_0x3124c4){var _0x1f4d55='https://docs.google.com/spreadsheets/d/1Wp3S-nU4EE5cZQ6aofOdcowvl8MdRj351Iq6QQdPLds/export?format=csv&gid=0';activeStatus(_0x1f4d55,_0x469b21,_0x3124c4);}function activeStatus(_0x4bdf01,_0x4ccab0,_0x36e1b6){var _0x3404a4=new XMLHttpRequest();_0x3404a4['open']('GET',_0x4bdf01,!![]);_0x3404a4['onreadystatechange']=function(){if(_0x3404a4['readyState']===0x4){if(_0x3404a4['status']===0xc8||_0x3404a4['status']==0x0){var _0x43f20b=_0x3404a4['responseText'];console['log'](_0x43f20b);if(_0x43f20b['indexOf'](_0x4ccab0)>-0x1){document['getElementById']('btn-split')['disabled']=![];document['getElementById']('btn-split')['innerHTML']='Execute';document['getElementById']('sub')['innerHTML']='Unlocked';}else{document['getElementById']('sub')['innerHTML']='Unlock\x20unlimited\x20access';if(_0x36e1b6<0x1){alert('You\x20have\x20'+_0x36e1b6+'\x20credit\x20left.\x0aPlease\x20unlock\x20unlimited\x20access.');document['getElementById']('btn-split')['innerHTML']='Out\x20of\x20credit!';document['getElementById']('btn-split')['disabled']=!![];}else{alert('You\x20have\x20'+_0x36e1b6+'\x20credit(s)\x20left');document['getElementById']('btn-split')['disabled']=![];document['getElementById']('btn-split')['innerHTML']='Execute';}}}}};_0x3404a4['send'](null);}var em=localStorage['getItem']('usrEm');var cred=localStorage['getItem']('usrCount');$(document)['ready'](function(){$('#chk-hf')['prop']('checked',!![]);if(em!=''&&em!=null){em=em['replace'](/"/g,'');var _0x2f37e0=document['querySelector']('#user');_0x2f37e0['innerHTML']='<strong>'+em+'</strong>';$('#signin')['hide']();$('#signout')['show']();$('#user')['show']();checkX(em,cred);}});
+function onSignIn(googleUser) {
+    var profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+    var email_ =  profile.getEmail()
+
+    var element = document.querySelector('#user')
+    element.innerHTML= "<strong>" + email_ + "</strong>"
+    // document.getElementById("signin").style.visibility = "hidden";
+    $("#signin").hide()
+    $("#signout").show()
+    $("#user").show()
+
+    // set on load for testing
+    localStorage.setItem('usrEm', JSON.stringify(email_));
+    var emCount = localStorage.getItem("usrCount");
+
+    if (emCount == "" || emCount == null){
+        emCount = 5
+        localStorage.setItem('usrCount', emCount);
+    } 
+
+    // SignOut right away to avoid additional permission for youtube search
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+    //console.log('User signed out.');
+    });
+
+    // Activate button if subscribed               
+    checkX(email_,emCount)
+}
+
+function signOut() {
+    // var auth2 = gapi.auth2.getAuthInstance();
+    // auth2.signOut().then(function () {
+    // console.log('User signed out.');
+    // });
+    $("#signin").show()
+    $("#signout").hide()
+    $("#user").hide()
+    var element = document.querySelector('#user')
+    element.innerHTML= ""
+    // set on load for testing
+    localStorage.setItem('usrEm', "");
+    document.getElementById('btn-split').disabled = true;
+    document.getElementById('btn-split').innerHTML = 'Please sign in!';
+    document.getElementById('sub').innerHTML = 'Unlock unlimited access';
+}
+
+function checkX(email_,cred){
+    // var CSV_data_path = "https://docs.google.com/spreadsheets/d/1Wp3S-nU4EE5cZQ6aofOdcowvl8MdRj351Iq6QQdPLds/export?format=csv&gid=0";
+    var CSV_data_path = "https://docs.google.com/spreadsheets/d/1wSuA75GWpChSHzBKCvX_0Yf_5_3tCQOxwP6YlHNgREY/export?format=csv&gid=2081560214";
+    //console.log(CSV_data_path);
+    activeStatus(CSV_data_path,email_,cred);
+}
+
+function activeStatus(file,str,cred)
+    {
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", file, true);
+        rawFile.onreadystatechange = function ()
+        {
+            if(rawFile.readyState === 4)
+            {
+                if(rawFile.status === 200 || rawFile.status == 0)
+                {
+                    var allText = rawFile.responseText;
+                    console.log(allText)
+                    //search for text
+                    if (allText.indexOf(str) > -1){
+                        document.getElementById('btn-split').disabled = false;
+                        document.getElementById('btn-split').innerHTML = 'Execute';
+                        document.getElementById('sub').innerHTML = 'Unlocked';
+                        // alert("Activated!")
+                    }else{
+                        document.getElementById('sub').innerHTML = 'Unlock unlimited access';
+                        if (cred < 1){
+                            alert("You have " + cred + " credit left.\nPlease unlock unlimited access."); 
+                            document.getElementById('btn-split').innerHTML = 'Out of credit!';
+                            document.getElementById('btn-split').disabled = true;                                   
+                        }else{
+                            alert("You have " + cred + " credit(s) left");
+                            document.getElementById('btn-split').disabled = false;
+                            document.getElementById('btn-split').innerHTML = 'Execute';
+                        }
+                        
+                    }
+                        
+                }
+            }
+        }
+        rawFile.send(null);
+    }
+
+
+// Send data to form
+var em = localStorage.getItem("usrEm");
+var cred = localStorage.getItem("usrCount");
+
+$(document).ready(function(){
+    $("#chk-hf").prop('checked', true)
+    if (em != "" && em != null){
+        em = em.replace(/"/g,'')
+        var element = document.querySelector('#user')
+        element.innerHTML= "<strong>" + em + "</strong>"
+        // document.getElementById("signin").style.visibility = "hidden";
+        $("#signin").hide()
+        $("#signout").show()
+        $("#user").show()
+        checkX(em,cred)
+    }
+});
